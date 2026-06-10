@@ -1,0 +1,18 @@
+name: olympe
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      # Parrot SDK (Python 3.9~3.11 / Linux x86_64 전용)
+      - parrot-olympe==8.4.0
+      # import olympe 가 영상 렌더러를 강제 로드 → 아래 3개 없으면 import 실패
+      - PySDL2
+      - pysdl2-dll
+      - PyOpenGL
+      # 서버 / 영상
+      - fastapi
+      - uvicorn[standard]
+      - websockets
+      - opencv-python

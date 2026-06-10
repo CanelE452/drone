@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# 가상환경
+.venv/
+.venv310/
+env/
+venv/
+
+# 로그/임시
+*.log
+/tmp/
+
+# OS/에디터
+.DS_Store
+.vscode/
+.idea/
