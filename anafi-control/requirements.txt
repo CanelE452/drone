@@ -1,0 +1,12 @@
+# conda 대신 pip/venv 경로용 (Python 3.10, Linux x86_64).
+# conda 사용 시에는 environment.yml 사용 권장.
+# 주의: import olympe 가 영상 렌더러를 강제 로드하므로 PySDL2/pysdl2-dll/PyOpenGL 필수.
+
+parrot-olympe==8.4.0
+PySDL2==0.9.17
+pysdl2-dll==2.32.10
+PyOpenGL==3.1.10
+fastapi==0.136.3
+uvicorn[standard]==0.49.0
+websockets==16.0
+opencv-python==4.13.0.92
