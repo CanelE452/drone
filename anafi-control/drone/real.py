@@ -1,5 +1,6 @@
 import copy
 import math
+import os
 import threading
 
 import config
@@ -9,6 +10,15 @@ from .telemetry import Telemetry
 
 # Olympe import 는 모듈 로드 시 무겁고 sdl2/OpenGL 의존성이 있으므로
 # RealController 가 실제로 선택될 때만 import 한다 (mock 실행 시 불필요).
+
+
+def _configure_runtime_dirs():
+    """Olympe 런타임 캐시를 프로젝트 안에 격리 (WSL/권한 오염 회피)."""
+    root = os.environ.get("OLYMPE_RUNTIME_ROOT", ".olympe_runtime")
+    for sub, var in (("share", "XDG_DATA_HOME"), ("cache", "XDG_CACHE_HOME")):
+        path = os.path.abspath(os.path.join(root, sub))
+        os.makedirs(path, exist_ok=True)
+        os.environ.setdefault(var, path)
 
 
 class RealController(AnafiController):
@@ -22,13 +32,18 @@ class RealController(AnafiController):
     def __init__(self, ip):
         import olympe
 
+        _configure_runtime_dirs()
         self._ip = ip
-        self._drone = olympe.Drone(ip)
+        # ANAFI Ai 전용 컨트롤러 클래스 우선, 없으면 범용 Drone 으로 fallback
+        controller_cls = getattr(olympe, "AnafiAi", None) or olympe.Drone
+        self._drone = controller_cls(ip)
         self._t = Telemetry()
         self._lock = threading.Lock()
 
     def connect(self) -> bool:
-        ok = bool(self._drone.connect())
+        # Olympe 연결은 충분한 타임아웃이 필요하다 (최소 45초 권장)
+        ok = bool(self._drone.connect(
+            timeout=config.CONNECT_TIMEOUT_S, retry=config.CONNECT_RETRY))
         with self._lock:
             self._t.connected = ok
         return ok

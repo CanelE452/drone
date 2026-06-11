@@ -16,5 +16,9 @@ MIN_STEP_CM = 10          # 데드밴드 회피 (이하 명령은 거부)
 MIN_BATTERY_PCT = 20      # 이하면 이동 명령 거부
 COMMAND_TIMEOUT_S = 10    # expectation 타임아웃
 
+# 연결 파라미터 (Olympe 연결은 충분한 타임아웃 필요 — 최소 45초 권장)
+CONNECT_TIMEOUT_S = float(os.environ.get("ANAFI_CONNECT_TIMEOUT", "45"))
+CONNECT_RETRY = int(os.environ.get("ANAFI_CONNECT_RETRY", "1"))
+
 # 텔레메트리 broadcast 주기
 TELEMETRY_HZ = 10

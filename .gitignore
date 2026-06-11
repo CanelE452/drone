@@ -14,6 +14,9 @@ venv/
 *.log
 /tmp/
 
+# Olympe 런타임 캐시 (XDG 격리)
+.olympe_runtime/
+
 # OS/에디터
 .DS_Store
 .vscode/
